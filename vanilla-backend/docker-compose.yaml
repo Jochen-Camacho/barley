@@ -1,0 +1,25 @@
+services:
+  server:
+    image: barley-vanilla-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 4001:4001
+    environment:
+      - DATABASE_URL=postgres://postgres:mysecretpassword@postgres:5432/postgres
+    container_name: barley-vanilla-backend
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+    volumes:
+      - postgres_barley_volume:/var/lib/postgresql/data
+
+volumes:
+  postgres_barley_volume:
+    external: true

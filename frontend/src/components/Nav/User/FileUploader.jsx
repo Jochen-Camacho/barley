@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -10,11 +10,21 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@apollo/client";
 import { UPLOAD_IMAGE } from "@/queries";
+import { useAuth } from "@/hooks/useAuth";
 
 const FileUploader = ({ isDialogOpen, closeDialog }) => {
   const [updateImage] = useMutation(UPLOAD_IMAGE);
   const [image, setImage] = useState({});
   const fileRef = useRef(null);
+  const { getUser, user } = useAuth();
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
+  if (!user) {
+    return <div>Loading user data...</div>;
+  }
 
   const handleFileClick = () => {
     console.log(fileRef.current);
@@ -40,7 +50,7 @@ const FileUploader = ({ isDialogOpen, closeDialog }) => {
   };
 
   const handleFileChangeConfirm = () => {
-    updateImage({ variables: { file: image, empId: 4 } });
+    updateImage({ variables: { ...image, empId: user.id } });
     closeDialog();
   };
 
@@ -59,7 +69,9 @@ const FileUploader = ({ isDialogOpen, closeDialog }) => {
             </DialogClose>
           </DialogHeader>
           <div className=" p-6 flex flex-col gap-6 items-center justify-center">
-            <div className="w-32 h-32 rounded-full bg-gray-200"></div>
+            <div className="w-32 h-32 rounded-full bg-gray-200 overflow-hidden">
+              <img className=" object-cover w-full h-full" src={image.data} />
+            </div>
             <div className="flex gap-2">
               <Button onClick={handleFileClick}>Upload</Button>
               <Button onClick={handleFileChangeConfirm} variant={"outline"}>

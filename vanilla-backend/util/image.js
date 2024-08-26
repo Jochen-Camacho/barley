@@ -3,7 +3,7 @@ const {
   BUCKET_REGION,
   ACCESS_KEY,
   SECRET_ACCESS_KEY,
-} = require("../util/config");
+} = require("./config");
 
 const {
   S3Client,

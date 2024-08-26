@@ -1,0 +1,1 @@
+{"version":3,"file":"create-department.input.js","sourceRoot":"","sources":["../../../src/department/dto/create-department.input.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,6CAAmD;AAG5C,IAAM,qBAAqB,GAA3B,MAAM,qBAAqB;CAGjC,CAAA;AAHY,sDAAqB;AAEhC;IADC,IAAA,eAAK,GAAE;;oDACM;gCAFH,qBAAqB;IADjC,IAAA,mBAAS,GAAE;GACC,qBAAqB,CAGjC"}

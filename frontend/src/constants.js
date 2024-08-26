@@ -90,6 +90,7 @@ export const typesOfAddForms = {
     fields: [
       { name: "First Name", value: "Input", key: "firstName" },
       { name: "Last Name", value: "Input", key: "lastName" },
+      { name: "Email", value: "Input", key: "email" },
       { name: "Base Salary", value: "Input", key: "base" },
       { name: "Variable Salary", value: "Input", key: "variable" },
       { name: "Bonus", value: "Input", key: "bonus" },
@@ -113,6 +114,7 @@ export const typesOfAddForms = {
     formSchema: z.object({
       firstName: z.string().min(2).max(50),
       lastName: z.string().min(2).max(50),
+      email: z.string().email(),
       base: z.string().min(0),
       variable: z.string().optional().default("0"),
       bonus: z.string().optional().default("0"),
@@ -126,13 +128,15 @@ export const typesOfAddForms = {
   Job: {
     fields: [
       { name: "Job Title", value: "Input", key: "title" },
+      { name: "Level", value: "Input", key: "level" },
       { name: "Department", value: "Select", key: "department" },
     ],
-    submitFunc: (data) => ({ ...data }),
+    submitFunc: (data) => ({ ...data, level: Number(data.level) }),
     query: CREATE_JOB,
     formSchema: z.object({
       title: z.string().min(2).max(50),
       department: z.string().min(2).max(50),
+      level: z.string(),
     }),
   },
   Department: {

@@ -1,0 +1,34 @@
+import { Employee } from './employee.entity';
+import { Repository } from 'typeorm';
+import { CreateEmployeeInput } from './dto/create-employee.input';
+import { JobService } from 'src/job/job.service';
+import { LocationService } from 'src/location/location.service';
+import { SalaryService } from 'src/salary/salary.service';
+import { PaybandService } from 'src/payband/payband.service';
+import { LoginInput } from './dto/login-input';
+import { JwtService } from '@nestjs/jwt';
+import { AllEmployeeArgs } from './dto/all-employee.input';
+import { ChangeRoleInput } from './dto/change-role.input';
+import { ImageService } from 'src/image/image.service';
+import { FileUploadInput } from './dto/file-upload.input';
+export declare class EmployeeService {
+    private employeeRepository;
+    private jobService;
+    private locationService;
+    private salaryService;
+    private paybandService;
+    private jwtService;
+    private imageService;
+    constructor(employeeRepository: Repository<Employee>, jobService: JobService, locationService: LocationService, salaryService: SalaryService, paybandService: PaybandService, jwtService: JwtService, imageService: ImageService);
+    findAll(allEmployeeArgs: AllEmployeeArgs): Promise<Employee[]>;
+    findMaxBaseSalary(): Promise<number>;
+    findById(id: number): Promise<Employee>;
+    createEmployee(createEmployeeInput: CreateEmployeeInput): Promise<Employee>;
+    changeRole(changeRoleInput: ChangeRoleInput): Promise<Employee>;
+    uploadImage(fileUploadInput: FileUploadInput): Promise<Employee>;
+    getJob(jobId: number): unknown;
+    getLocation(locationId: number): unknown;
+    getSalary(salaryId: number): unknown;
+    getPaybad(paybandId: number): unknown;
+    login(loginInput: LoginInput): unknown;
+}

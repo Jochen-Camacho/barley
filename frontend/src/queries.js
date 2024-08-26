@@ -1,8 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const ALL_EMPLOYEES = gql`
-  query AllEmployees($jobTitle: String, $department: String, $level: Int) {
-    allEmployees(jobTitle: $jobTitle, department: $department, level: $level) {
+  query AllEmployees($job: String, $department: String, $level: Int) {
+    allEmployees(
+      allEmployeeArgs: { department: $department, job: $job, level: $level }
+    ) {
       firstName
       lastName
       job {
@@ -39,6 +41,9 @@ export const ALL_META = gql`
       city
       country
     }
+    allDepartments {
+      title
+    }
   }
 `;
 
@@ -69,23 +74,9 @@ export const ALL_PAY_BANDS = gql`
   }
 `;
 
-export const FIND_PAY_BAND = gql`
-  query AllPayBands($jobTitle: String, $department: String, $level: Int) {
-    allPayBands(jobTitle: $jobTitle, department: $department, level: $level) {
-      job {
-        level
-        title
-      }
-      jobFunction {
-        title
-      }
-    }
-  }
-`;
-
 export const FIND_EMPLOYEE = gql`
-  query AllEmployees($id: ID) {
-    allEmployees(id: $id) {
+  query AllEmployees($id: Int) {
+    allEmployees(allEmployeeArgs: { id: $id }) {
       firstName
       id
       job {
@@ -123,6 +114,7 @@ export const CREATE_EMPLOYEE = gql`
   mutation AddEmployee(
     $firstName: String!
     $lastName: String!
+    $email: String!
     $job: String!
     $city: String!
     $country: String!
@@ -133,16 +125,19 @@ export const CREATE_EMPLOYEE = gql`
     $equity: Int
   ) {
     addEmployee(
-      firstName: $firstName
-      lastName: $lastName
-      job: $job
-      city: $city
-      country: $country
-      base: $base
-      variable: $variable
-      bonus: $bonus
-      benefits: $benefits
-      equity: $equity
+      createEmployeeInput: {
+        firstName: $firstName
+        lastName: $lastName
+        email: $email
+        job: $job
+        city: $city
+        country: $country
+        base: $base
+        variable: $variable
+        bonus: $bonus
+        benefits: $benefits
+        equity: $equity
+      }
     ) {
       firstName
     }
@@ -150,8 +145,10 @@ export const CREATE_EMPLOYEE = gql`
 `;
 
 export const CREATE_JOB = gql`
-  mutation AddJob($job: String!, $department: String!, $level: Int!) {
-    addJob(job: $job, department: $department, level: $level) {
+  mutation AddJob($title: String!, $department: String!, $level: Int!) {
+    addJob(
+      createJobInput: { title: $title, department: $department, level: $level }
+    ) {
       title
     }
   }
@@ -159,7 +156,7 @@ export const CREATE_JOB = gql`
 
 export const CREATE_LOCATION = gql`
   mutation AddLocation($city: String!, $country: String!) {
-    addLocation(city: $city, country: $country) {
+    addLocation(createLocationInput: { city: $city, country: $country }) {
       city
       country
     }
@@ -168,7 +165,7 @@ export const CREATE_LOCATION = gql`
 
 export const CREATE_DEPARTMENT = gql`
   mutation AddDepartment($title: String!) {
-    addDepartment(title: $title) {
+    addDepartment(createDepartmentInput: { title: $title }) {
       title
     }
   }
@@ -176,7 +173,7 @@ export const CREATE_DEPARTMENT = gql`
 
 export const CHANGE_ROLE = gql`
   mutation ChangeRole($jobId: Int!, $id: Int!) {
-    changeRole(jobId: $jobId, id: $id) {
+    changeRole(changeRoleInput: { jobId: $jobId, id: $id }) {
       job {
         title
       }
@@ -185,16 +182,25 @@ export const CHANGE_ROLE = gql`
 `;
 
 export const UPLOAD_IMAGE = gql`
-  mutation UploadImage($file: FileInput!, $empId: Int!) {
-    uploadImage(file: $file, empId: $empId)
+  mutation UploadImage($data: String!, $mimetype: String!, $empId: Int!) {
+    uploadImage(
+      fileUploadInput: { data: $data, mimetype: $mimetype, id: $empId }
+    ) {
+      image
+    }
   }
 `;
 
 export const LOGIN = gql`
-  mutation Mutation($firstName: String!, $lastName: String!, $email: String!) {
-    login(firstName: $firstName, lastName: $lastName, email: $email) {
+  mutation {
+    login(
+      loginInput: {
+        firstName: "John"
+        lastName: "Doe"
+        email: "johndoe@gmail.com"
+      }
+    ) {
       token
-      id
     }
   }
 `;

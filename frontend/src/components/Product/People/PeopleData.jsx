@@ -11,12 +11,13 @@ import { ALL_EMPLOYEES } from "@/queries";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const PeopleData = ({ filterVars }) => {
+  console.log(filterVars);
   const result = useQuery(ALL_EMPLOYEES, {
     variables: { ...filterVars },
   });
 
   return (
-    <ScrollArea className="border rounded-md">
+    <ScrollArea className="border rounded-md overflow-auto">
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-50 text-nowrap">

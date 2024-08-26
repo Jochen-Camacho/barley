@@ -8,7 +8,7 @@ const Benefits = ({ employee }) => {
         <div className="block md:hidden">
           <ProductHeader header={"Benefits"} />
         </div>
-        <div className="flex px-8 gap-6 flex-wrap">
+        <div className="flex px-8 gap-6 flex-wrap md:py-0 py-4">
           <div className="border p-3 rounded-md min-w-[300px]">
             <h1 className="hidden md:flex font-bold text-lg">Your Benefits</h1>
             <div className="flex gap-4 md:mt-4">

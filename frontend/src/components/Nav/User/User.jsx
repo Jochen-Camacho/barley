@@ -27,7 +27,7 @@ const User = () => {
       <DropdownMenu>
         <DropdownMenuTrigger className="focus-visible:outline-none ">
           {isAuthenticated && (
-            <div className="w-10 h-10 bg-black rounded-full overflow-hidden ">
+            <div className="w-10 h-10 rounded-full overflow-hidden ">
               <img src={user.image} className=" object-cover w-full h-full" />
             </div>
           )}

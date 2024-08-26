@@ -33,7 +33,7 @@ const People = () => {
 
   const headerItemOptions = {
     department: [
-      ...new Set(metaResult.data.allJobs.map((j) => j.department.title)),
+      ...new Set(metaResult.data.allDepartments.map((d) => d.title)),
     ].sort((a, b) => a.localeCompare(b)),
     job: [...new Set(metaResult.data.allJobs.map((j) => j.title))].sort(
       (a, b) => a.localeCompare(b)
@@ -50,7 +50,7 @@ const People = () => {
   };
 
   return (
-    <div className="w-full bg-white shadow-md rounded-md lg:max-w-[67vw] md:max-w-[63vw] mx-auto">
+    <div className="w-full bg-white shadow-md rounded-md lg:max-w-[67vw] md:max-w-[63vw] max-w-[90vw] mx-auto">
       <ProductHeader header={"People"}>
         <div className="flex items-center px-4">
           <Dialog open={isFormOpen}>

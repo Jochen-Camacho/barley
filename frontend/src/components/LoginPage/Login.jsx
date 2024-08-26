@@ -15,7 +15,7 @@ const Login = () => {
   const [goToEmployeeForm, setGoToEmployeeForm] = useState(false);
   return (
     <div className="flex w-full items-center justify-center absolute top-1/2 -translate-y-1/2">
-      <div className="flex flex-col items-center  shadow-md rounded-md py-4 px-12 border">
+      <div className="flex flex-col items-center  shadow-md rounded-md py-4 px-12 border bg-white">
         <h1 className="text-3xl sm:text-4xl font-bold sm:p-6">Login</h1>
 
         {goToEmployeeForm ? (

@@ -31,13 +31,17 @@ const EmployeeProfile = () => {
     },
   });
 
-  const empResult = useQuery(FIND_EMPLOYEE, { variables: { id: id } });
+  const empResult = useQuery(FIND_EMPLOYEE, {
+    variables: { id: Number(id) },
+  });
   const jobsResult = useQuery(ALL_META);
   const [changeRole] = useMutation(CHANGE_ROLE, {
     refetchQueries: [{ query: FIND_EMPLOYEE }],
   });
 
   if (empResult.loading || jobsResult.loading) return <div>Loading</div>;
+
+  console.log(empResult.data);
 
   const employee = empResult.data.allEmployees[0];
 

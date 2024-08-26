@@ -25,7 +25,7 @@ const PayBands = () => {
   };
 
   return (
-    <div className="w-full lg:max-w-[67vw] md:max-w-[63vw] bg-white shadow-md rounded-md mx-auto">
+    <div className="w-full lg:max-w-[67vw] md:max-w-[63vw] max-w-[90vw]  bg-white shadow-md rounded-md mx-auto">
       <div>
         <ProductHeader header={"Pay Bands"} />
         <div className="p-4 flex flex-col gap-4">

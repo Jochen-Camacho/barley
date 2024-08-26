@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import "./App.css";
 import EmployeeProfile from "./components/EmployeeProfile/EmployeeProfile";
 import PayBands from "./components/Product/PayBands/PayBands";
@@ -14,26 +15,49 @@ import User from "./components/Nav/User/User";
 import { useAuth } from "./hooks/useAuth";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  const { isAuthenticated, isLoading } = useAuth();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("ProtectedRoute rendered", {
+      isAuthenticated,
+      isLoading,
+      pathname: location.pathname,
+    });
+  }, [isAuthenticated, isLoading, location]);
+
+  if (isLoading) {
+    console.log("Auth state is loading");
+    return <div>Loading...</div>; // Or your loading component
+  }
+
+  if (!isAuthenticated) {
+    console.log("User is not authenticated, redirecting to login");
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  console.log("User is authenticated, rendering children");
+  return children;
 };
 
-const AuthenticatedLayout = ({ children }) => (
-  <div className="min-h-screen h-screen w-full flex">
-    <Header>
-      <div className="w-full flex md:justify-end justify-between items-center">
-        <MobileNav />
-        <User />
+const AuthenticatedLayout = ({ children }) => {
+  return (
+    <div className="min-h-screen h-screen w-full flex">
+      <Header>
+        <div className="w-full flex md:justify-end justify-between items-center">
+          <MobileNav />
+          <User />
+        </div>
+      </Header>
+      <div className="hidden md:block w-full lg:max-w-[250px] md:max-w-[200px]">
+        <Sidebar />
       </div>
-    </Header>
-    <div className="hidden md:block w-full lg:max-w-[250px] md:max-w-[200px]">
-      <Sidebar />
+      <div className="flex-1">
+        <ProductWrapper>{children}</ProductWrapper>
+      </div>
     </div>
-    <div className="flex-1">
-      <ProductWrapper>{children}</ProductWrapper>
-    </div>
-  </div>
-);
+  );
+};
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -52,6 +76,17 @@ const App = () => {
                   Barley
                 </div>
               </Header>
+              <div className="absolute w-[100vw] h-screen backdrop-blur-lg bg-black/80 -z-10">
+                <div
+                  style={{
+                    backgroundImage: "url(/assets/background.jpg)",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                  className="w-full h-full opacity-25"
+                ></div>
+              </div>
+
               <Login />
             </>
           )

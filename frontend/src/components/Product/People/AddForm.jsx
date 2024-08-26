@@ -37,6 +37,7 @@ const AddForm = ({ formTypeData, options, closeForm }) => {
 
   const onSubmit = (data) => {
     const dataValues = formTypeData.submitFunc(data);
+    // console.log(dataValues);
     functionForMutation({ variables: { ...dataValues } });
     if (result.error) console.log(result.error);
     closeForm();
