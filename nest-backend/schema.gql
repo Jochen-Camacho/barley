@@ -1,0 +1,152 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Payband {
+  id: Int!
+  department: Department!
+  departmentId: Int!
+  job: Job!
+  jobId: Int!
+  employees: [Employee!]
+}
+
+type Department {
+  id: Int!
+  title: String!
+  jobs: [Job!]
+  paybands: [Payband!]
+}
+
+type Job {
+  id: Int!
+  title: String!
+  level: Int!
+  employees: [Employee!]
+  department: Department!
+  departmentId: Int!
+  payband: Payband!
+}
+
+type Location {
+  id: Int!
+  city: String!
+  country: String!
+  employees: [Employee!]
+}
+
+type Salary {
+  id: Int!
+  base: Int!
+  variable: Int!
+  bonus: Int!
+  benefits: Int!
+  equity: Int!
+  employee: Employee!
+}
+
+type Employee {
+  id: Int!
+  firstName: String!
+  lastName: String!
+  email: String!
+  admin: Boolean!
+  image: String
+  job: Job!
+  jobId: Int!
+  location: Location!
+  locationId: Int!
+  salary: Salary!
+  salaryId: Int!
+  payband: Payband!
+  paybandId: Int!
+}
+
+type Token {
+  token: String!
+}
+
+type Query {
+  allEmployees(allEmployeeArgs: AllEmployeeArgs!): [Employee!]!
+  maxEmployeeBaseSalary: Float!
+  getLoggedInUser: Employee!
+  allJobs: [Job!]!
+  findByTitle(title: String!): Job!
+  allDepartments: [Department!]!
+  allPayBands: [Payband!]!
+  allLocations: [Location!]!
+  getSalary(id: Float!): Salary!
+}
+
+input AllEmployeeArgs {
+  job: String
+  level: Int
+  department: String
+  id: Int
+}
+
+type Mutation {
+  addEmployee(createEmployeeInput: CreateEmployeeInput!): Employee!
+  changeRole(changeRoleInput: ChangeRoleInput!): Employee!
+  uploadImage(fileUploadInput: FileUploadInput!): Employee!
+  login(loginInput: LoginInput!): Token!
+  addJob(createJobInput: CreateJobInput!): Job!
+  addDepartment(createDepartmentInput: CreateDepartmentInput!): Department!
+  addLocation(createLocationInput: CreateLocationInput!): Location!
+  createSalary(createSalaryInput: CreateSalaryInput!): Salary!
+}
+
+input CreateEmployeeInput {
+  id: Int!
+  firstName: String!
+  lastName: String!
+  email: String!
+  job: String!
+  city: String!
+  country: String!
+  base: Int!
+  variable: Int
+  bonus: Int
+  benefits: Int
+  equity: Int
+}
+
+input ChangeRoleInput {
+  id: Int!
+  jobId: Int!
+}
+
+input FileUploadInput {
+  id: Int!
+  mimetype: String!
+  data: String!
+}
+
+input LoginInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+input CreateJobInput {
+  title: String!
+  level: Int!
+  department: String!
+}
+
+input CreateDepartmentInput {
+  title: String!
+}
+
+input CreateLocationInput {
+  city: String!
+  country: String!
+}
+
+input CreateSalaryInput {
+  base: Int!
+  variable: Int!
+  bonus: Int!
+  benefits: Int!
+  equity: Int!
+}
