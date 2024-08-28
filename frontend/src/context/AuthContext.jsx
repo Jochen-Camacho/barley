@@ -103,6 +103,7 @@ export const AuthProvider = ({ children }) => {
   const getUser = useCallback(async () => {
     if (isAuthenticated && userIdData?.getLoggedInUserId?.id) {
       try {
+        console.log("Refetching...");
         await refetchUser();
       } catch (error) {
         console.error("Error fetching user data:", error);

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
-// import { ImageModule } from 'src/image/image.module';
+import { ImageModule } from 'src/image/image.module';
 import { EmployeeController } from './employee.controller';
 import { Location } from 'src/location/entities/location.entity';
 import { Job } from 'src/job/entities/job.entity';
@@ -16,7 +16,7 @@ import { Payband } from 'src/payband/entities/payband.entity';
     JwtModule.register({
       secret: 'secret',
     }),
-    // ImageModule,
+    ImageModule,
   ],
   providers: [EmployeeService],
   exports: [EmployeeService],

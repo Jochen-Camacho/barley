@@ -11,10 +11,18 @@ export class EmployeeController {
     const { input } = req.body;
     const { createEmployeeInput } = input;
 
-    console.log(createEmployeeInput);
     const result =
       await this.employeeService.createEmployee(createEmployeeInput);
-    console.log(result);
+
+    return result;
+  }
+
+  @Post('uploadImage')
+  async uploadImage(@Req() req: Request) {
+    const { input } = req.body;
+    const { fileUploadInput } = input;
+
+    const result = this.employeeService.uploadImage(fileUploadInput);
 
     return result;
   }

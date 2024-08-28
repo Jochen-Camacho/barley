@@ -129,21 +129,21 @@ export const CREATE_EMPLOYEE = gql`
     $firstName: String!
     $lastName: String!
     $email: String!
-    $job: String!
+    $jobId: Int!
     $city: String!
     $country: String!
     $base: Int!
-    $variable: Int
-    $bonus: Int
-    $benefits: Int
-    $equity: Int
+    $variable: Int!
+    $bonus: Int!
+    $benefits: Int!
+    $equity: Int!
   ) {
     addEmployee(
       createEmployeeInput: {
         firstName: $firstName
         lastName: $lastName
         email: $email
-        job: $job
+        jobId: $jobId
         city: $city
         country: $country
         base: $base
@@ -193,10 +193,8 @@ export const CREATE_DEPARTMENT = gql`
 
 export const CHANGE_ROLE = gql`
   mutation ChangeRole($jobId: Int!, $id: Int!) {
-    changeRole(changeRoleInput: { jobId: $jobId, id: $id }) {
-      job {
-        title
-      }
+    update_employee(where: { id: { _eq: $id } }, _set: { jobId: $jobId }) {
+      affected_rows
     }
   }
 `;

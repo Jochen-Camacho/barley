@@ -12,9 +12,9 @@ import { useMutation } from "@apollo/client";
 import { UPLOAD_IMAGE } from "@/queries";
 import { useAuth } from "@/hooks/useAuth";
 
-const FileUploader = ({ isDialogOpen, closeDialog }) => {
+const FileUploader = ({ isDialogOpen, closeDialog, userImage }) => {
   const [updateImage] = useMutation(UPLOAD_IMAGE);
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState({ data: userImage });
   const fileRef = useRef(null);
   const { getUser, user } = useAuth();
 
@@ -49,8 +49,9 @@ const FileUploader = ({ isDialogOpen, closeDialog }) => {
     }
   };
 
-  const handleFileChangeConfirm = () => {
-    updateImage({ variables: { ...image, empId: user.id } });
+  const handleFileChangeConfirm = async () => {
+    await updateImage({ variables: { ...image, empId: user.id } });
+    getUser();
     closeDialog();
   };
 
@@ -63,14 +64,20 @@ const FileUploader = ({ isDialogOpen, closeDialog }) => {
 
             <DialogClose
               className=" absolute left-[94%] top-[2%]"
-              onClick={closeDialog}
+              onClick={() => {
+                closeDialog();
+                setImage({ data: userImage });
+              }}
             >
               <X className="w-5 h-5" />
             </DialogClose>
           </DialogHeader>
           <div className=" p-6 flex flex-col gap-6 items-center justify-center">
             <div className="w-32 h-32 rounded-full bg-gray-200 overflow-hidden">
-              <img className=" object-cover w-full h-full" src={image.data} />
+              <img
+                className=" object-cover w-full h-full"
+                src={image.data || userImage}
+              />
             </div>
             <div className="flex gap-2">
               <Button onClick={handleFileClick}>Upload</Button>

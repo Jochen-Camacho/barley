@@ -50,6 +50,7 @@ const User = () => {
       <FileUploader
         isDialogOpen={isDialogOpen}
         closeDialog={() => setIsDialogOpen(false)}
+        userImage={user.image}
       />
     </div>
   );

@@ -4,16 +4,15 @@ import { Repository } from 'typeorm';
 import { Employee } from './entities/employee.entity';
 import { LoginInput } from './dto/login.input';
 import { JwtService } from '@nestjs/jwt';
-// import { AllEmployeeArgs } from './dto/all-employee-args.input';
-// import { ChangeRoleInput } from './dto/change-role.input';
-// import { ImageService } from 'src/image/image.service';
-// import { FileUploadInput } from './dto/file-upload.input';
+import { FileUploadInput } from './dto/file-upload.input';
 import { Token } from './dto/token.output';
 import { Job } from 'src/job/entities/job.entity';
 import { Payband } from 'src/payband/entities/payband.entity';
 import { Salary } from 'src/salary/entities/salary.entity';
 import { Location } from 'src/location/entities/location.entity';
 import { CreateEmployeeInput } from './dto/create-employee.input';
+import { v4 as uuidv4 } from 'uuid';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class EmployeeService {
@@ -29,6 +28,7 @@ export class EmployeeService {
     @InjectRepository(Payband)
     private paybandRepository: Repository<Payband>,
     private jwtService: JwtService,
+    private imageService: ImageService,
   ) {}
 
   async findById(id: number): Promise<Employee> {
@@ -91,26 +91,19 @@ export class EmployeeService {
 
     return this.employeeRepository.save(employee);
   }
-  //   async changeRole(changeRoleInput: ChangeRoleInput): Promise<Employee> {
-  //     const [employee, job] = await Promise.all([
-  //       this.employeeRepository.findOneByOrFail({ id: changeRoleInput.id }),
-  //       this.jobService.findById(changeRoleInput.jobId),
-  //     ]);
-  //     employee.jobId = job.id;
-  //     return this.employeeRepository.save(employee);
-  //   }
-  //   async uploadImage(fileUploadInput: FileUploadInput): Promise<Employee> {
-  //     const { mimetype, data, id } = fileUploadInput;
-  //     const filename = uuidv4() + '_photo.jpg';
-  //     const base64Data = data.replace(/^data:image\/\w+;base64,/, '');
-  //     const buffer = Buffer.from(base64Data, 'base64');
-  //     const [imageLink, employee] = await Promise.all([
-  //       this.imageService.putImage(buffer, filename, mimetype),
-  //       this.employeeRepository.findOneByOrFail({ id }),
-  //     ]);
-  //     employee.image = imageLink;
-  //     return this.employeeRepository.save(employee);
-  //   }
+
+  async uploadImage(fileUploadInput: FileUploadInput): Promise<Employee> {
+    const { mimetype, data, id } = fileUploadInput;
+    const filename = uuidv4() + '_photo.jpg';
+    const base64Data = data.replace(/^data:image\/\w+;base64,/, '');
+    const buffer = Buffer.from(base64Data, 'base64');
+    const [imageLink, employee] = await Promise.all([
+      this.imageService.putImage(buffer, filename, mimetype),
+      this.employeeRepository.findOneByOrFail({ id }),
+    ]);
+    employee.image = imageLink;
+    return this.employeeRepository.save(employee);
+  }
 
   async login(loginInput: LoginInput): Promise<Token> {
     const user = await this.employeeRepository.findOne({

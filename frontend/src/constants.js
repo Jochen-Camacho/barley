@@ -109,6 +109,7 @@ export const typesOfAddForms = {
     submitFunc: (data) => {
       return {
         ...data,
+        jobId: Number(data.job),
         base: Number(data.base),
         variable: Number(data.variable),
         bonus: Number(data.bonus),
@@ -126,7 +127,7 @@ export const typesOfAddForms = {
       bonus: z.string().optional().default("0"),
       equity: z.string().optional().default("0"),
       benefits: z.string().optional().default("0"),
-      job: z.string().min(2).max(50),
+      job: z.string().min(1).max(50),
       city: z.string().min(2).max(50),
       country: z.string().min(2).max(50),
     }),

@@ -36,12 +36,15 @@ const EmployeeProfile = () => {
   });
   const jobsResult = useQuery(ALL_META);
   const [changeRole] = useMutation(CHANGE_ROLE, {
-    refetchQueries: [{ query: FIND_EMPLOYEE }],
+    refetchQueries: [{ query: FIND_EMPLOYEE, variables: { id: Number(id) } }],
   });
 
-  if (empResult.loading || jobsResult.loading) return <div>Loading</div>;
+  if (empResult.error) {
+    console.error("Error fetching employee:", empResult.error);
+    return <div>Error loading employee data.</div>;
+  }
 
-  console.log(empResult.data.employee_by_pk);
+  if (empResult.loading || jobsResult.loading) return <div>Loading</div>;
 
   const employee = empResult.data.employee_by_pk;
 
@@ -59,18 +62,21 @@ const EmployeeProfile = () => {
 
   const onSubmit = async (data) => {
     try {
-      const jobId = jobsResult.data.job.find((j) => j.title === data.job).id;
+      const job = jobsResult.data.job.find((j) => j.title === data.job);
+      if (!job || !employee.id) {
+        throw new Error("Missing job or employee ID");
+      }
+      const jobId = job.id;
       await changeRole({
         variables: {
           id: Number(employee.id),
-          jobId: Number(jobId),
+          jobId,
         },
       });
     } catch (error) {
-      console.log(error);
+      console.log("Error during role change:", error);
     }
   };
-
   return (
     <div className="w-full bg-white shadow-md rounded-md">
       <ProductHeader header={"Employee Profile"} />

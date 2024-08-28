@@ -22,17 +22,22 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMutation } from "@apollo/client";
 
 const AddForm = ({ formTypeData, options, closeForm }) => {
-  console.log(options);
   const [functionForMutation, result] = useMutation(formTypeData.query);
   const form = useForm({
     resolver: zodResolver(formTypeData.formSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
+      email: "",
       job: "",
       department: "",
       country: "",
       city: "",
+      base: "",
+      variable: "",
+      bonus: "",
+      benefits: "",
+      equity: "",
     },
   });
 
@@ -41,6 +46,7 @@ const AddForm = ({ formTypeData, options, closeForm }) => {
     console.log(dataValues);
     functionForMutation({ variables: { ...dataValues } });
     if (result.error) console.log(result.error);
+    console.log(result);
     closeForm();
   };
 
@@ -68,18 +74,18 @@ const AddForm = ({ formTypeData, options, closeForm }) => {
                           ) : formField.value === "Select" ? (
                             <Select
                               onValueChange={(value) => {
-                                console.log(
-                                  options[formField.key][0].id === Number(value)
-                                );
+                                console.log(value);
                                 field.onChange(value);
                               }}
                               defaultValue={field.value}
                             >
                               <SelectTrigger>
                                 <SelectValue placeholder={formField.name}>
-                                  {options[formField.key].find(
-                                    (o) => o.id === Number(field.value)
-                                  )?.title || formField.name}
+                                  {typeof options[formField.key] === "object"
+                                    ? options[formField.key].find(
+                                        (o) => o.id === Number(field.value)
+                                      )?.title
+                                    : formField.value}
                                 </SelectValue>
                               </SelectTrigger>
                               <SelectContent>
@@ -104,7 +110,9 @@ const AddForm = ({ formTypeData, options, closeForm }) => {
                 );
               })}
 
-              <Button className="mt-5">Create</Button>
+              <Button className="mt-5" type="submit">
+                Create
+              </Button>
             </form>
           </Form>
         </ScrollArea>
