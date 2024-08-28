@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback, useRef } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { LOGIN, GET_LOGGED_IN_USER } from "@/queries";
+import { LOGIN, GET_LOGGED_IN_USER_ID, GET_LOGGED_IN_USER } from "@/queries";
 
 export const AuthContext = createContext(null);
 
@@ -12,41 +12,66 @@ export const AuthProvider = ({ children }) => {
   const authCheckPerformed = useRef(false);
 
   const {
+    data: userIdData,
+    refetch: refetchUserId,
+    error: userIdError,
+  } = useQuery(GET_LOGGED_IN_USER_ID, {
+    skip: !isAuthenticated,
+    fetchPolicy: "network-only",
+  });
+
+  const {
     data: userData,
     refetch: refetchUser,
     error: userError,
   } = useQuery(GET_LOGGED_IN_USER, {
-    skip: !isAuthenticated,
+    skip: !userIdData?.getLoggedInUserId?.id,
     fetchPolicy: "network-only",
+    variables: { id: userIdData?.getLoggedInUserId?.id },
   });
 
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("barley-user");
-      if (token && !authCheckPerformed.current) {
+      if (token) {
         try {
-          await refetchUser();
+          // Perform a request to validate the token
+          await refetchUserId(); // Ensure this does not fail silently
           setIsAuthenticated(true);
         } catch (error) {
-          console.error("Error validating token:", error);
+          console.error("Token validation failed:", error);
           localStorage.removeItem("barley-user");
+          setIsAuthenticated(false);
         }
+      } else {
+        setIsAuthenticated(false);
       }
       setIsLoading(false);
       authCheckPerformed.current = true;
     };
 
     checkAuth();
-  }, [refetchUser]);
+  }, [refetchUserId]);
 
   useEffect(() => {
-    if (userData && userData.getLoggedInUser) {
-      setUser(userData.getLoggedInUser);
+    if (userIdData && userIdData.getLoggedInUserId) {
+      refetchUser(); // Fetch the user data based on the ID
+    } else if (userIdError) {
+      console.error("Error fetching user ID:", userIdError);
+      setIsAuthenticated(false);
+      localStorage.removeItem("barley-user");
+    }
+  }, [userIdData, userIdError, refetchUser]);
+
+  useEffect(() => {
+    if (userData && userData.employee_by_pk) {
+      setUser(userData.employee_by_pk);
     } else if (userError) {
       console.error("Error fetching user data:", userError);
       setIsAuthenticated(false);
       localStorage.removeItem("barley-user");
     }
+    setIsLoading(false);
   }, [userData, userError]);
 
   const login = useCallback(
@@ -57,7 +82,7 @@ export const AuthProvider = ({ children }) => {
         const token = data.login.token;
         localStorage.setItem("barley-user", token);
         setIsAuthenticated(true);
-        await refetchUser();
+        await refetchUserId(); // Ensure user ID is fetched
         return { success: true };
       } catch (error) {
         console.error("Login failed:", error);
@@ -66,7 +91,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
       }
     },
-    [loginMutation, refetchUser]
+    [loginMutation, refetchUserId]
   );
 
   const logout = useCallback(() => {
@@ -76,14 +101,14 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const getUser = useCallback(async () => {
-    if (isAuthenticated) {
+    if (isAuthenticated && userIdData?.getLoggedInUserId?.id) {
       try {
         await refetchUser();
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     }
-  }, [isAuthenticated, refetchUser]);
+  }, [isAuthenticated, userIdData, refetchUser]);
 
   useEffect(() => {
     console.log("Auth state changed:", {

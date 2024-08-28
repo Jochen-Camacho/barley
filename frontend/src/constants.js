@@ -27,16 +27,19 @@ export const payBandsHeaders = [
     id: 1,
     title: "Job Function",
     key: "department",
+    default: "",
   },
   {
     id: 2,
     title: "Job Title",
     key: "job",
+    default: "",
   },
   {
     id: 3,
     title: "Level",
     key: "level",
+    default: [1, 2, 3, 4],
   },
 ];
 
@@ -45,16 +48,19 @@ export const peopleHeaders = [
     id: 1,
     title: "Job Function",
     key: "department",
+    default: "",
   },
   {
     id: 2,
     title: "Job Title",
     key: "job",
+    default: "",
   },
   {
     id: 3,
     title: "Level",
     key: "level",
+    default: [1, 2, 3, 4],
   },
 ];
 
@@ -131,11 +137,15 @@ export const typesOfAddForms = {
       { name: "Level", value: "Input", key: "level" },
       { name: "Department", value: "Select", key: "department" },
     ],
-    submitFunc: (data) => ({ ...data, level: Number(data.level) }),
+    submitFunc: (data) => ({
+      ...data,
+      level: Number(data.level),
+      department: Number(data.department),
+    }),
     query: CREATE_JOB,
     formSchema: z.object({
       title: z.string().min(2).max(50),
-      department: z.string().min(2).max(50),
+      department: z.string().min(1).max(50),
       level: z.string(),
     }),
   },

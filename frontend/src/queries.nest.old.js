@@ -1,15 +1,9 @@
 import { gql } from "@apollo/client";
 
 export const ALL_EMPLOYEES = gql`
-  query AllEmployees($job: String, $department: String, $level: [Int]) {
-    employee(
-      where: {
-        _and: [
-          { job: { title: { _regex: $job } } }
-          { job: { department: { title: { _regex: $department } } } }
-          { job: { level: { _in: $level } } }
-        ]
-      }
+  query AllEmployees($job: String, $department: String, $level: Int) {
+    allEmployees(
+      allEmployeeArgs: { department: $department, job: $job, level: $level }
     ) {
       firstName
       lastName
@@ -35,7 +29,7 @@ export const ALL_EMPLOYEES = gql`
 
 export const ALL_META = gql`
   query AllJobs {
-    job {
+    allJobs {
       title
       department {
         title
@@ -43,28 +37,19 @@ export const ALL_META = gql`
       level
       id
     }
-    location {
+    allLocations {
       city
       country
     }
-    department {
-      id
+    allDepartments {
       title
     }
   }
 `;
 
 export const ALL_PAY_BANDS = gql`
-  query AllPayBands($job: String, $department: String, $level: [Int]) {
-    payband(
-      where: {
-        _and: [
-          { job: { title: { _regex: $job } } }
-          { job: { department: { title: { _regex: $department } } } }
-          { job: { level: { _in: $level } } }
-        ]
-      }
-    ) {
+  query AllPayBands {
+    allPayBands {
       employees {
         firstName
         lastName
@@ -85,12 +70,13 @@ export const ALL_PAY_BANDS = gql`
         title
       }
     }
+    maxEmployeeBaseSalary
   }
 `;
 
 export const FIND_EMPLOYEE = gql`
-  query AllEmployees($id: Int!) {
-    employee_by_pk(id: $id) {
+  query AllEmployees($id: Int) {
+    allEmployees(allEmployeeArgs: { id: $id }) {
       firstName
       id
       job {
@@ -159,34 +145,28 @@ export const CREATE_EMPLOYEE = gql`
 `;
 
 export const CREATE_JOB = gql`
-  mutation AddJob($title: String!, $department: Int!, $level: Int!) {
-    insert_payband_one(
-      object: {
-        departmentId: $department
-        job: {
-          data: { departmentId: $department, title: $title, level: $level }
-        }
-      }
+  mutation AddJob($title: String!, $department: String!, $level: Int!) {
+    addJob(
+      createJobInput: { title: $title, department: $department, level: $level }
     ) {
-      job {
-        id
-      }
+      title
     }
   }
 `;
 
 export const CREATE_LOCATION = gql`
   mutation AddLocation($city: String!, $country: String!) {
-    insert_location_one(object: { city: $city, country: $country }) {
+    addLocation(createLocationInput: { city: $city, country: $country }) {
       city
+      country
     }
   }
 `;
 
 export const CREATE_DEPARTMENT = gql`
   mutation AddDepartment($title: String!) {
-    insert_department_one(object: { title: $title }) {
-      id
+    addDepartment(createDepartmentInput: { title: $title }) {
+      title
     }
   }
 `;
@@ -212,26 +192,22 @@ export const UPLOAD_IMAGE = gql`
 `;
 
 export const LOGIN = gql`
-  mutation Login($firstName: String!, $lastName: String!, $email: String!) {
+  mutation {
     login(
-      loginInput: { email: $email, firstName: $firstName, lastName: $lastName }
+      loginInput: {
+        firstName: "John"
+        lastName: "Doe"
+        email: "johndoe@gmail.com"
+      }
     ) {
       token
     }
   }
 `;
 
-export const GET_LOGGED_IN_USER_ID = gql`
-  query GetLoggedInUserId {
-    getLoggedInUserId {
-      id
-    }
-  }
-`;
-
 export const GET_LOGGED_IN_USER = gql`
-  query GetLoggedInUser($id: Int!) {
-    employee_by_pk(id: $id) {
+  query GetLoggedInUser {
+    getLoggedInUser {
       firstName
       id
       image

@@ -13,8 +13,10 @@ const ProductHeaderItem = ({
   setFilterVars,
   filterVars,
   identifier,
+  defaultFilter,
 }) => {
   const [triggerName, setTriggerName] = useState(title);
+  console.log(typeof options[0] === "object");
 
   return (
     <DropdownMenu>
@@ -29,7 +31,7 @@ const ProductHeaderItem = ({
         <DropdownMenuItem
           onClick={() => {
             setTriggerName(title);
-            setFilterVars({ ...filterVars, [identifier]: null });
+            setFilterVars({ ...filterVars, [identifier]: defaultFilter });
           }}
         >
           All
@@ -37,13 +39,13 @@ const ProductHeaderItem = ({
         {options
           ? options.map((o) => (
               <DropdownMenuItem
-                key={o}
+                key={typeof o === "object" ? o.id : o}
                 onClick={() => {
                   setFilterVars({ ...filterVars, [identifier]: o });
                   setTriggerName(o);
                 }}
               >
-                {o}
+                {typeof o === "object" ? o.title : o}
               </DropdownMenuItem>
             ))
           : null}

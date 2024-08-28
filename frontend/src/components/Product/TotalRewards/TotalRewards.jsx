@@ -13,11 +13,23 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 
 const TotalRewards = () => {
-  const { getUser, user } = useAuth();
+  const { getUser, user, isLoading } = useAuth();
+  console.log(user);
 
   useEffect(() => {
-    getUser();
+    const fetchData = async () => {
+      try {
+        await getUser(); // Ensure this updates the user state correctly
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+    fetchData();
   }, [getUser]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (!user) {
     return <div>Loading user data...</div>;

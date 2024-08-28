@@ -41,9 +41,9 @@ const EmployeeProfile = () => {
 
   if (empResult.loading || jobsResult.loading) return <div>Loading</div>;
 
-  console.log(empResult.data);
+  console.log(empResult.data.employee_by_pk);
 
-  const employee = empResult.data.allEmployees[0];
+  const employee = empResult.data.employee_by_pk;
 
   const min =
     Math.min(...employee.payband.employees.map((e) => e.salary.base)) / 1000 -
@@ -59,9 +59,7 @@ const EmployeeProfile = () => {
 
   const onSubmit = async (data) => {
     try {
-      const jobId = jobsResult.data.allJobs.find(
-        (j) => j.title === data.job
-      ).id;
+      const jobId = jobsResult.data.job.find((j) => j.title === data.job).id;
       await changeRole({
         variables: {
           id: Number(employee.id),
@@ -159,7 +157,7 @@ const EmployeeProfile = () => {
                           <SelectValue placeholder={employee.job.title} />
                         </SelectTrigger>
                         <SelectContent>
-                          {jobsResult.data.allJobs.map((j) => (
+                          {jobsResult.data.job.map((j) => (
                             <SelectItem key={j.title} value={j.title}>
                               {j.title}
                             </SelectItem>

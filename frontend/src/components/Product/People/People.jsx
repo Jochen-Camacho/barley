@@ -24,7 +24,11 @@ import { ALL_META } from "@/queries";
 
 const People = () => {
   const [addButton, setAddButton] = useState("Employee");
-  const [filterVars, setFilterVars] = useState({});
+  const [filterVars, setFilterVars] = useState({
+    job: "",
+    department: "",
+    level: [1, 2, 3, 4],
+  });
   const metaResult = useQuery(ALL_META);
   const [isHoveringAdd, setIsHoveringAdd] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -32,21 +36,21 @@ const People = () => {
   if (metaResult.loading) return <div>Loading</div>;
 
   const headerItemOptions = {
-    department: [
-      ...new Set(metaResult.data.allDepartments.map((d) => d.title)),
-    ].sort((a, b) => a.localeCompare(b)),
-    job: [...new Set(metaResult.data.allJobs.map((j) => j.title))].sort(
-      (a, b) => a.localeCompare(b)
+    department: [...new Set(metaResult.data.department.map((d) => d))].sort(
+      (a, b) => a.title.localeCompare(b.title)
     ),
-    level: [...new Set(metaResult.data.allJobs.map((j) => j.level))].sort(
+    job: [...new Set(metaResult.data.job.map((j) => j))].sort((a, b) =>
+      a.title.localeCompare(b.title)
+    ),
+    level: [...new Set(metaResult.data.job.map((j) => j.level))].sort(
       (a, b) => a - b
     ),
-    city: [...new Set(metaResult.data.allLocations.map((l) => l.city))].sort(
+    city: [...new Set(metaResult.data.location.map((l) => l.city))].sort(
       (a, b) => a.localeCompare(b)
     ),
-    country: [
-      ...new Set(metaResult.data.allLocations.map((l) => l.country)),
-    ].sort((a, b) => a.localeCompare(b)),
+    country: [...new Set(metaResult.data.location.map((l) => l.country))].sort(
+      (a, b) => a.localeCompare(b)
+    ),
   };
 
   return (
@@ -119,6 +123,7 @@ focus-visible:ring-transparent focus-visible:ring-offset-0"
                 setFilterVars={setFilterVars}
                 filterVars={filterVars}
                 identifier={pbh.key}
+                defaultFilter={pbh.default}
               />
             </div>
           ))}

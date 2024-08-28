@@ -9,12 +9,19 @@ import {
 import { useQuery } from "@apollo/client";
 import { ALL_EMPLOYEES } from "@/queries";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { useNavigate } from "react-router-dom";
 
 const PeopleData = ({ filterVars }) => {
-  console.log(filterVars);
+  const navigate = useNavigate();
+
+  // console.log(filterVars);
   const result = useQuery(ALL_EMPLOYEES, {
     variables: { ...filterVars },
   });
+
+  if (result.loading) return;
+
+  // console.log(result);
 
   return (
     <ScrollArea className="border rounded-md overflow-auto">
@@ -44,8 +51,12 @@ const PeopleData = ({ filterVars }) => {
               <TableCell>Loading</TableCell>
             </TableRow>
           ) : (
-            result.data.allEmployees.map((e) => (
-              <TableRow key={e.id}>
+            result.data.employee.map((e) => (
+              <TableRow
+                key={e.id}
+                onClick={() => navigate(`/people/${e.id}`)}
+                className="cursor-pointer"
+              >
                 <TableCell className=" whitespace-nowrap flex items-center gap-2">
                   <div className="w-8 h-8  rounded-full  overflow-hidden ">
                     <img

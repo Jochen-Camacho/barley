@@ -17,7 +17,8 @@ const PayBandsData = ({ filterVars }) => {
   });
   if (results.loading) return <div>Loading</div>;
 
-  const range = (results.data.maxEmployeeBaseSalary + 30000) / 1000;
+  // const range = (results.data.maxEmployeeBaseSalary + 30000) / 1000;
+  const range = (100000 + 30000) / 1000;
   let ranges = [];
 
   for (let i = 0; i < 4; i++) {
@@ -48,7 +49,7 @@ const PayBandsData = ({ filterVars }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {results.data.allPayBands.map((pb, index) => (
+          {results.data.payband.map((pb, index) => (
             <TableRow key={index}>
               <TableCell className="whitespace-nowrap">
                 {pb.department.title}

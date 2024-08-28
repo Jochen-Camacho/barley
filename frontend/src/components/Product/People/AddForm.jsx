@@ -22,6 +22,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMutation } from "@apollo/client";
 
 const AddForm = ({ formTypeData, options, closeForm }) => {
+  console.log(options);
   const [functionForMutation, result] = useMutation(formTypeData.query);
   const form = useForm({
     resolver: zodResolver(formTypeData.formSchema),
@@ -37,7 +38,7 @@ const AddForm = ({ formTypeData, options, closeForm }) => {
 
   const onSubmit = (data) => {
     const dataValues = formTypeData.submitFunc(data);
-    // console.log(dataValues);
+    console.log(dataValues);
     functionForMutation({ variables: { ...dataValues } });
     if (result.error) console.log(result.error);
     closeForm();
@@ -66,17 +67,29 @@ const AddForm = ({ formTypeData, options, closeForm }) => {
                             <Input placeholder={formField.name} {...field} />
                           ) : formField.value === "Select" ? (
                             <Select
-                              onValueChange={field.onChange}
+                              onValueChange={(value) => {
+                                console.log(
+                                  options[formField.key][0].id === Number(value)
+                                );
+                                field.onChange(value);
+                              }}
                               defaultValue={field.value}
                             >
                               <SelectTrigger>
-                                <SelectValue placeholder={formField.name} />
+                                <SelectValue placeholder={formField.name}>
+                                  {options[formField.key].find(
+                                    (o) => o.id === Number(field.value)
+                                  )?.title || formField.name}
+                                </SelectValue>
                               </SelectTrigger>
                               <SelectContent>
                                 {options[formField.key].map((o, index) => {
                                   return (
-                                    <SelectItem key={index} value={o}>
-                                      {o}
+                                    <SelectItem
+                                      key={index}
+                                      value={typeof o === "object" ? o.id : o}
+                                    >
+                                      {typeof o === "object" ? o.title : o}
                                     </SelectItem>
                                   );
                                 })}

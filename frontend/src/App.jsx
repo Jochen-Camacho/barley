@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (isLoading) {
     console.log("Auth state is loading");
-    return <div>Loading...</div>; // Or your loading component
+    return <div>Loading...</div>; // Or a loading spinner/component
   }
 
   if (!isAuthenticated) {

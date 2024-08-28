@@ -7,19 +7,23 @@ import { useQuery } from "@apollo/client";
 import { ALL_META } from "@/queries";
 
 const PayBands = () => {
-  const [filterVars, setFilterVars] = useState({});
+  const [filterVars, setFilterVars] = useState({
+    job: "",
+    department: "",
+    level: [1, 2, 3, 4],
+  });
   const jobsResult = useQuery(ALL_META);
 
   if (jobsResult.loading) return <div>Loading</div>;
 
   const headerItemOptions = {
     department: [
-      ...new Set(jobsResult.data.allJobs.map((j) => j.department.title)),
+      ...new Set(jobsResult.data.job.map((j) => j.department.title)),
     ].sort((a, b) => a.localeCompare(b)),
-    job: [...new Set(jobsResult.data.allJobs.map((j) => j.title))].sort(
-      (a, b) => a.localeCompare(b)
+    job: [...new Set(jobsResult.data.job.map((j) => j.title))].sort((a, b) =>
+      a.localeCompare(b)
     ),
-    level: [...new Set(jobsResult.data.allJobs.map((j) => j.level))].sort(
+    level: [...new Set(jobsResult.data.job.map((j) => j.level))].sort(
       (a, b) => a - b
     ),
   };
@@ -38,6 +42,7 @@ const PayBands = () => {
                   setFilterVars={setFilterVars}
                   filterVars={filterVars}
                   identifier={pbh.key}
+                  defaultFilter={pbh.default}
                 />
               </div>
             ))}
