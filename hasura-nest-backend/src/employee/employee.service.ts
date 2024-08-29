@@ -116,4 +116,14 @@ export class EmployeeService {
     tokenObj.token = token;
     return tokenObj;
   }
+
+  async getMaxSalary() {
+    const query = this.employeeRepository
+      .createQueryBuilder('employee')
+      .leftJoinAndSelect('employee.salary', 'salary');
+
+    query.select('MAX(salary.base)', 'max');
+
+    return { salary: await query.getRawOne() };
+  }
 }

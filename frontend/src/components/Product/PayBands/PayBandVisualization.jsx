@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 const PayBandVisualization = ({ min, max, employees }) => {
   const [isHovered, setIsHovered] = useState({});
+  const [hoverData, setHoverData] = useState({
+    hoverItem: null,
+    position: { top: 0, left: 0 },
+  });
 
   const salaries = employees.map((e) => e.salary.base);
 
@@ -16,17 +21,28 @@ const PayBandVisualization = ({ min, max, employees }) => {
   };
 
   const salaryFreq = new Map();
-
-  const handleMouseEnter = (salary) => {
-    setIsHovered({ ...isHovered, [salary]: true });
+  const handleMouseEnter = (e, salary) => {
+    const rect = e.target.getBoundingClientRect();
+    setIsHovered((prev) => ({ ...prev, [salary]: true }));
+    setHoverData({
+      hoverItem: salary,
+      position: {
+        top: rect.top + window.scrollY - 10,
+        left: rect.left + window.scrollX + rect.width / 2,
+      },
+    });
   };
 
   const handleMouseLeave = (salary) => {
-    setIsHovered({ ...isHovered, [salary]: false });
+    setIsHovered((prev) => ({ ...prev, [salary]: false }));
+    setHoverData({
+      hoverItem: null,
+      position: { top: 0, left: 0 },
+    });
   };
 
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full z-0">
       <div
         className="absolute top-1/2 h-6 bg-[#C4EFF4] -translate-y-1/2 z-0"
         style={{
@@ -47,35 +63,11 @@ const PayBandVisualization = ({ min, max, employees }) => {
             className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 "
             style={{ left: `${getPosition(salary)}%` }}
           >
-            <div className="relative ">
-              {isHovered[salary] && (
-                <div
-                  className=" absolute z-10 top-[100%] max-h-[150px] left-1/2 -translate-x-1/2 bg-white border p-2 min-w-[150px] w-full max-w-[200px]  overflow-y-auto"
-                  onMouseEnter={() => handleMouseEnter(salary)}
-                  onMouseLeave={() => handleMouseLeave(salary)}
-                >
-                  {employees.map((e, index) => {
-                    if (e.salary.base === salary) {
-                      return (
-                        <div
-                          className="p-2 cursor-pointer text-nowrap flex items-center gap-2"
-                          key={index}
-                        >
-                          <img
-                            src={e.image}
-                            className="rounded-full w-5 h-5 object-cover"
-                          />
-                          {e.firstName} {e.lastName}
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              )}
+            <div>
               {salaryFreq.get(salary) > 1 ? (
                 <div
                   className="bg-[#8275FD] w-4 h-4 rounded-full flex items-center justify-center cursor-pointer"
-                  onMouseEnter={() => handleMouseEnter(salary)}
+                  onMouseEnter={(e) => handleMouseEnter(e, salary)}
                   onMouseLeave={() => handleMouseLeave(salary)}
                 >
                   <p className=" text-xs text-white font-bold">
@@ -85,7 +77,7 @@ const PayBandVisualization = ({ min, max, employees }) => {
               ) : (
                 <div
                   className="bg-[#B7ADFA] w-3 h-3 rounded-full"
-                  onMouseEnter={() => handleMouseEnter(salary)}
+                  onMouseEnter={(e) => handleMouseEnter(e, salary)}
                   onMouseLeave={() => handleMouseLeave(salary)}
                 ></div>
               )}
@@ -93,6 +85,35 @@ const PayBandVisualization = ({ min, max, employees }) => {
           </div>
         );
       })}
+      {hoverData.hoverItem &&
+        createPortal(
+          <div
+            className="absolute z-50 p-2 bg-white shadow-md border rounded"
+            style={{
+              top: hoverData.position.top,
+              left: hoverData.position.left,
+              transform: "translate(-50%, -100%)",
+            }}
+          >
+            {employees.map((e, index) => {
+              if (e.salary.base === hoverData.hoverItem) {
+                return (
+                  <div
+                    className="p-2 cursor-pointer flex items-center gap-2"
+                    key={index}
+                  >
+                    <img
+                      src={e.image}
+                      className="rounded-full w-5 h-5 object-cover"
+                    />
+                    {e.firstName} {e.lastName}
+                  </div>
+                );
+              }
+            })}
+          </div>,
+          document.body
+        )}
     </div>
   );
 };

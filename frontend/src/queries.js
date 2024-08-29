@@ -85,6 +85,9 @@ export const ALL_PAY_BANDS = gql`
         title
       }
     }
+    maxEmployeeBaseSalary {
+      salary
+    }
   }
 `;
 

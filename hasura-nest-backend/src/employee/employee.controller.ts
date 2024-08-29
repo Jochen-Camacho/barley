@@ -26,4 +26,9 @@ export class EmployeeController {
 
     return result;
   }
+
+  @Post('maxSalary')
+  async maxSalary() {
+    return this.employeeService.getMaxSalary();
+  }
 }

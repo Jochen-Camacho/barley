@@ -29,11 +29,11 @@ const PayBands = () => {
   };
 
   return (
-    <div className="w-full lg:max-w-[67vw] md:max-w-[63vw] max-w-[90vw]  bg-white shadow-md rounded-md mx-auto">
+    <div className="w-full lg:max-w-[67vw] md:max-w-[63vw] max-w-[90vw]  bg-white shadow-md rounded-md mx-auto flex flex-col">
       <div>
         <ProductHeader header={"Pay Bands"} />
-        <div className="p-4 flex flex-col gap-4">
-          <div className="flex flex-wrap gap-4 items-center">
+        <div className="p-4 flex flex-col gap-4 h-full">
+          <div className="flex flex-wrap gap-4 items-center ">
             {payBandsHeaders.map((pbh) => (
               <div key={pbh.id}>
                 <ProductHeaderItem
@@ -47,7 +47,7 @@ const PayBands = () => {
               </div>
             ))}
           </div>
-          <div className="w-full overflow-hidden">
+          <div className="w-full flex-grow z-0">
             <PayBandsData filterVars={filterVars} />
           </div>
         </div>
