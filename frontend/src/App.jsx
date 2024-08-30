@@ -16,6 +16,7 @@ import { useAuth } from "./hooks/useAuth";
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
+  console.log("Logged In: ", isAuthenticated);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;

@@ -34,6 +34,14 @@ export class EmployeeService {
 
   async findById(id: number): Promise<Employee> {
     return this.employeeRepository.findOne({
+      relations: [
+        'job',
+        'job.department',
+        'payband',
+        'payband.employees.salary',
+        'salary',
+        'location',
+      ],
       where: { id },
     });
   }

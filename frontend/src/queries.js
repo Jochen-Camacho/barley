@@ -222,17 +222,9 @@ export const LOGIN = gql`
   }
 `;
 
-export const GET_LOGGED_IN_USER_ID = gql`
-  query GetLoggedInUserId {
-    getLoggedInUserId {
-      id
-    }
-  }
-`;
-
 export const GET_LOGGED_IN_USER = gql`
-  query GetLoggedInUser($id: Int!) {
-    employee_by_pk(id: $id) {
+  query GetLoggedInUser {
+    getLoggedInUser {
       firstName
       id
       image

@@ -1,77 +1,72 @@
 import { createContext, useState, useEffect, useCallback, useRef } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { LOGIN, GET_LOGGED_IN_USER_ID, GET_LOGGED_IN_USER } from "@/queries";
+import { LOGIN, GET_LOGGED_IN_USER } from "@/queries";
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    sessionStorage.getItem("Authenticated")
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [loginMutation] = useMutation(LOGIN);
   const authCheckPerformed = useRef(false);
 
   const {
-    data: userIdData,
-    refetch: refetchUserId,
-    error: userIdError,
-  } = useQuery(GET_LOGGED_IN_USER_ID, {
-    skip: !isAuthenticated,
-    fetchPolicy: "network-only",
-  });
-
-  const {
     data: userData,
     refetch: refetchUser,
     error: userError,
   } = useQuery(GET_LOGGED_IN_USER, {
-    skip: !userIdData?.getLoggedInUserId?.id,
+    skip: !isAuthenticated,
     fetchPolicy: "network-only",
-    variables: { id: userIdData?.getLoggedInUserId?.id },
   });
 
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem("barley-user");
-      if (token) {
-        try {
-          await refetchUserId();
-          setIsAuthenticated(true);
-        } catch (error) {
-          console.error("Token validation failed:", error);
-          localStorage.removeItem("barley-user");
+      try {
+        if (token) {
+          try {
+            await refetchUser();
+            setIsAuthenticated(true);
+          } catch (error) {
+            console.error("Token validation failed:", error);
+            localStorage.removeItem("barley-user");
+            setIsAuthenticated(false);
+          }
+        } else {
           setIsAuthenticated(false);
         }
-      } else {
-        setIsAuthenticated(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
+
       authCheckPerformed.current = true;
     };
 
     checkAuth();
-  }, [refetchUserId]);
+  }, [refetchUser]);
 
   useEffect(() => {
-    if (userIdData && userIdData.getLoggedInUserId) {
-      refetchUser(); // Fetch the user data based on the ID
-    } else if (userIdError) {
-      console.error("Error fetching user ID:", userIdError);
-      setIsAuthenticated(false);
-      localStorage.removeItem("barley-user");
+    try {
+      if (userData && userData.getLoggedInUser) {
+        setUser(userData.getLoggedInUser);
+      } else if (userError) {
+        console.error("Error fetching user data:", userError);
+        setIsAuthenticated(false);
+        localStorage.removeItem("barley-user");
+      }
+    } catch (error) {
+      console.log(error);
     }
-  }, [userIdData, userIdError, refetchUser]);
-
-  useEffect(() => {
-    if (userData && userData.employee_by_pk) {
-      setUser(userData.employee_by_pk);
-    } else if (userError) {
-      console.error("Error fetching user data:", userError);
-      setIsAuthenticated(false);
-      localStorage.removeItem("barley-user");
-    }
-    setIsLoading(false);
   }, [userData, userError]);
+
+  useEffect(() => {
+    sessionStorage.setItem("Authenticated", isAuthenticated);
+  }, [isAuthenticated]);
 
   const login = useCallback(
     async (loginData) => {
@@ -81,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         const token = data.login.token;
         localStorage.setItem("barley-user", token);
         setIsAuthenticated(true);
-        await refetchUserId(); // Ensure user ID is fetched
+        await refetchUser();
         return { success: true };
       } catch (error) {
         console.error("Login failed:", error);
@@ -90,7 +85,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoading(false);
       }
     },
-    [loginMutation, refetchUserId]
+    [loginMutation, refetchUser]
   );
 
   const logout = useCallback(() => {
@@ -100,7 +95,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const getUser = useCallback(async () => {
-    if (isAuthenticated && userIdData?.getLoggedInUserId?.id) {
+    if (isAuthenticated) {
       try {
         console.log("Refetching...");
         await refetchUser();
@@ -108,7 +103,7 @@ export const AuthProvider = ({ children }) => {
         console.error("Error fetching user data:", error);
       }
     }
-  }, [isAuthenticated, userIdData, refetchUser]);
+  }, [isAuthenticated, refetchUser]);
 
   const value = {
     isAuthenticated,

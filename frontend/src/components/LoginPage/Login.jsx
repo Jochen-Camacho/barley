@@ -8,8 +8,10 @@ import { LoadingSpinner } from "../ui/spinner";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading, isAuthenticated } = useAuth();
+  const { login, isLoading } = useAuth();
   const [goToEmployeeForm, setGoToEmployeeForm] = useState(false);
+
+  console.log(isLoading);
 
   useEffect(() => {
     navigate("/login");
@@ -31,7 +33,7 @@ const Login = () => {
               Go Back
             </Button>
           </div>
-        ) : isLoading || !isAuthenticated ? (
+        ) : isLoading ? (
           <span className="flex justify-center items-center gap-2 text-xl min-w-[200px] py-4">
             Loading
             <LoadingSpinner />
@@ -45,7 +47,7 @@ const Login = () => {
               Employee
             </Button>
             <Button
-              className="bg-[#5032aa] text-white border text-xl pl-10 py-6 hover:bg-[#5f3bc8] w-full flex items-center justify-center gap-2"
+              className="bg-[#5032aa] text-white border text-xl px-10 py-6 hover:bg-[#5f3bc8] w-full flex items-center justify-center gap-2"
               onClick={async () => {
                 await login({
                   firstName: "John",

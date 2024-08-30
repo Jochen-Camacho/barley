@@ -25,20 +25,18 @@ const MobileNav = () => {
     getUser();
   }, [getUser]);
 
-  if (!user) {
-    return <div>Loading user data...</div>;
-  }
-
-  const filterSideBarLinks = sideBarLinks.filter((l) => {
-    if (!user.admin) return l.admin !== user.admin;
-    else return l;
-  });
+  const filterSideBarLinks = !user
+    ? []
+    : sideBarLinks.filter((l) => {
+        if (!user.admin) return l.admin !== user.admin;
+        else return l;
+      });
   return (
     <div className="md:hidden block">
       <Sheet>
         <SheetTrigger className="  text-white">
           <div className="flex gap-2 items-center">
-            <Logs />{" "}
+            <Logs />
             <p className="scroll-m-20 text-xl font-semibold tracking-tight ">
               Barley
             </p>
