@@ -14,6 +14,7 @@ const PayBandVisualization = ({ min, max, employees }) => {
     salaries.forEach((s) => {
       setIsHovered({ ...isHovered, [s]: false });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getPosition = (salary) => {

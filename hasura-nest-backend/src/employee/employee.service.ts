@@ -13,6 +13,7 @@ import { Location } from 'src/location/entities/location.entity';
 import { CreateEmployeeInput } from './dto/create-employee.input';
 import { v4 as uuidv4 } from 'uuid';
 import { ImageService } from 'src/image/image.service';
+import { ChangeRoleInput } from './dto/change-role.input';
 
 @Injectable()
 export class EmployeeService {
@@ -125,5 +126,24 @@ export class EmployeeService {
     query.select('MAX(salary.base)', 'max');
 
     return { salary: await query.getRawOne() };
+  }
+
+  async changeRole(changeRoleInput: ChangeRoleInput) {
+    const employee = await this.employeeRepository.findOne({
+      where: { id: changeRoleInput.id },
+    });
+    const job = await this.jobRepository.findOne({
+      where: { id: changeRoleInput.jobId },
+    });
+    const payband = await this.paybandRepository.findOne({
+      relations: ['job'],
+      where: { job: { id: job.id } },
+    });
+
+    employee.job = job;
+    employee.payband = payband;
+    await this.employeeRepository.save(employee);
+
+    return { output: 'Success' };
   }
 }

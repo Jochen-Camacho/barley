@@ -196,8 +196,8 @@ export const CREATE_DEPARTMENT = gql`
 
 export const CHANGE_ROLE = gql`
   mutation ChangeRole($jobId: Int!, $id: Int!) {
-    update_employee(where: { id: { _eq: $id } }, _set: { jobId: $jobId }) {
-      affected_rows
+    changeRole(changeRoleInput: { id: $id, jobId: $jobId }) {
+      output
     }
   }
 `;

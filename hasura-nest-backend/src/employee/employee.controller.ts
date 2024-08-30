@@ -31,4 +31,12 @@ export class EmployeeController {
   async maxSalary() {
     return this.employeeService.getMaxSalary();
   }
+
+  @Post('changeRole')
+  async changeRole(@Req() req: Request) {
+    const { input } = req.body;
+    const { changeRoleInput } = input;
+
+    return this.employeeService.changeRole(changeRoleInput);
+  }
 }
