@@ -1,0 +1,18 @@
+table:
+  name: payband
+  schema: public
+object_relationships:
+  - name: department
+    using:
+      foreign_key_constraint_on: departmentId
+  - name: job
+    using:
+      foreign_key_constraint_on: jobId
+array_relationships:
+  - name: employees
+    using:
+      foreign_key_constraint_on:
+        column: paybandId
+        table:
+          name: employee
+          schema: public

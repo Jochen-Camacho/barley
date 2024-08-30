@@ -1,5 +1,24 @@
-version: '3.6'
 services:
+  server:
+    image: nest-barley-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3000:3000
+    environment:
+      - BUCKET_NAME=${BUCKET_NAME}
+      - BUCKET_REGION=${BUCKET_REGION}
+      - ACCESS_KEY=${ACCESS_KEY}
+      - SECRET_ACCESS_KEY=${SECRET_ACCESS_KEY}
+      - SECRET=${SECRET}
+      - DB_HOST=postgres
+    networks:
+      - barley-network
+    container_name: nest-barley-backend-container
+
   postgres:
     image: postgres:12
     restart: always
@@ -11,6 +30,8 @@ services:
       - '5432:5432'
     volumes:
       - barley_hasura_postgres:/var/lib/postgresql/data
+    networks:
+      - barley-network
 
   hasura:
     image: hasura/graphql-engine:v2.26.0
@@ -18,11 +39,18 @@ services:
       - '8080:8080'
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://myuser:mysecretpassword@postgres:5432/mydb
-      # HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:mysecretpassword@postgres-barley:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
       HASURA_GRAPHQL_ADMIN_SECRET: myadminsecret
+      ACTION_BASE_URL: http://server:3000
+    networks:
+      - barley-network
     depends_on:
       - postgres
+      - server
 
 volumes:
   barley_hasura_postgres:
+
+networks:
+  barley-network:
+    driver: bridge

@@ -1,0 +1,6 @@
+- "!include public_department.yaml"
+- "!include public_employee.yaml"
+- "!include public_job.yaml"
+- "!include public_location.yaml"
+- "!include public_payband.yaml"
+- "!include public_salary.yaml"

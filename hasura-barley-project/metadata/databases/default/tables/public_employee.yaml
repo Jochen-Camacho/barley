@@ -1,0 +1,16 @@
+table:
+  name: employee
+  schema: public
+object_relationships:
+  - name: job
+    using:
+      foreign_key_constraint_on: jobId
+  - name: location
+    using:
+      foreign_key_constraint_on: locationId
+  - name: payband
+    using:
+      foreign_key_constraint_on: paybandId
+  - name: salary
+    using:
+      foreign_key_constraint_on: salaryId

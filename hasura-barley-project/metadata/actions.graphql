@@ -1,0 +1,130 @@
+type Mutation {
+  addEmployee(
+    createEmployeeInput: createEmployeeInput!
+  ): addEmployeeOutput
+}
+
+type Mutation {
+  changeRole(
+    changeRoleInput: ChangeRoleInput!
+  ): ChangeRoleOutput
+}
+
+type Query {
+  getLoggedInUser: employee_ActionType
+}
+
+type Mutation {
+  login(
+    loginInput: LoginInput!
+  ): Token
+}
+
+type Query {
+  maxEmployeeBaseSalary: MaxSalaryOutput
+}
+
+type Mutation {
+  uploadImage(
+    fileUploadInput: FileUploadInput!
+  ): FileUploadOutput
+}
+
+input LoginInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+input createEmployeeInput {
+  email: String!
+  firstName: String!
+  jobId: Int!
+  lastName: String!
+  city: String!
+  country: String!
+  base: Int!
+  benefits: Int!
+  bonus: Int!
+  equity: Int!
+  variable: Int!
+}
+
+input FileUploadInput {
+  data: String!
+  mimetype: String!
+  id: Int!
+}
+
+input ChangeRoleInput {
+  id: Int!
+  jobId: Int!
+}
+
+type Token {
+  token: String!
+}
+
+type employee_ActionType {
+  admin: Boolean!
+  email: String!
+  firstName: String!
+  id: Int!
+  image: String!
+  job: job_ActionType!
+  lastName: String!
+  location: location_ActionType!
+  payband: payband_ActionType!
+  salary: salary_ActionType!
+}
+
+type department_ActionType {
+  id: Int!
+  title: String!
+}
+
+type job_ActionType {
+  department: department_ActionType!
+  id: Int!
+  level: Int!
+  title: String!
+}
+
+type location_ActionType {
+  city: String!
+  country: String!
+  id: Int!
+}
+
+type salary_ActionType {
+  base: Int!
+  benefits: Int!
+  bonus: Int!
+  equity: Int!
+  id: Int!
+  variable: Int!
+}
+
+type payband_ActionType {
+  department: department_ActionType!
+  id: Int!
+  job: job_ActionType!
+  employees: [employee_ActionType!]!
+}
+
+type addEmployeeOutput {
+  firstName: String!
+}
+
+type FileUploadOutput {
+  image: String!
+}
+
+type MaxSalaryOutput {
+  salary: Int!
+}
+
+type ChangeRoleOutput {
+  output: String!
+}
+

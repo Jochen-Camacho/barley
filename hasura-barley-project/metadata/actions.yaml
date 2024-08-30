@@ -1,0 +1,46 @@
+actions:
+  - name: addEmployee
+    definition:
+      kind: synchronous
+      handler: '{{ACTION_BASE_URL}}/employee'
+  - name: changeRole
+    definition:
+      kind: synchronous
+      handler: '{{ACTION_BASE_URL}}/employee/changeRole'
+  - name: getLoggedInUser
+    definition:
+      kind: ""
+      handler: '{{ACTION_BASE_URL}}/auth/user'
+      forward_client_headers: true
+  - name: login
+    definition:
+      kind: synchronous
+      handler: http://172.27.32.1:3000/auth/login
+  - name: maxEmployeeBaseSalary
+    definition:
+      kind: ""
+      handler: '{{ACTION_BASE_URL}}/employee/maxSalary'
+  - name: uploadImage
+    definition:
+      kind: synchronous
+      handler: '{{ACTION_BASE_URL}}/employee/uploadImage'
+custom_types:
+  enums: []
+  input_objects:
+    - name: LoginInput
+    - name: createEmployeeInput
+    - name: FileUploadInput
+    - name: ChangeRoleInput
+  objects:
+    - name: Token
+    - name: employee_ActionType
+    - name: department_ActionType
+    - name: job_ActionType
+    - name: location_ActionType
+    - name: salary_ActionType
+    - name: payband_ActionType
+    - name: addEmployeeOutput
+    - name: FileUploadOutput
+    - name: MaxSalaryOutput
+    - name: ChangeRoleOutput
+  scalars: []
