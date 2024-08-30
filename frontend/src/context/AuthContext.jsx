@@ -54,10 +54,6 @@ export const AuthProvider = ({ children }) => {
     try {
       if (userData && userData.getLoggedInUser) {
         setUser(userData.getLoggedInUser);
-      } else if (userError) {
-        console.error("Error fetching user data:", userError);
-        setIsAuthenticated(false);
-        localStorage.removeItem("barley-user");
       }
     } catch (error) {
       console.log(error);
@@ -74,9 +70,11 @@ export const AuthProvider = ({ children }) => {
       try {
         const { data } = await loginMutation({ variables: { ...loginData } });
         const token = data.login.token;
+        console.log(token);
         localStorage.setItem("barley-user", token);
         setIsAuthenticated(true);
         await refetchUser();
+        console.log("Fetech Successful");
         return { success: true };
       } catch (error) {
         console.error("Login failed:", error);

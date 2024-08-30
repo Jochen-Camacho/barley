@@ -11,7 +11,7 @@ const Login = () => {
   const { login, isLoading } = useAuth();
   const [goToEmployeeForm, setGoToEmployeeForm] = useState(false);
 
-  console.log(isLoading);
+  console.log("Loading: ", isLoading);
 
   useEffect(() => {
     navigate("/login");
