@@ -58,25 +58,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      data-connector-agent:
-        condition: service_healthy
-
-  data-connector-agent:
-    image: hasura/graphql-data-connector:v2.42.0
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      QUARKUS_LOG_LEVEL: ERROR # FATAL, ERROR, WARN, INFO, DEBUG, TRACE
-      QUARKUS_OPENTELEMETRY_ENABLED: 'false'
-    healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8081/api/v1/athena/health']
-      interval: 5s
-      timeout: 10s
-      retries: 5
-      start_period: 5s
-    networks:
-      - barley-network
 
 volumes:
   barley_hasura_postgres:
