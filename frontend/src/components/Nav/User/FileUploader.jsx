@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -10,21 +10,17 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@apollo/client";
 import { UPLOAD_IMAGE } from "@/queries";
-import { useAuth } from "@/hooks/useAuth";
 
-const FileUploader = ({ isDialogOpen, closeDialog, userImage }) => {
+const FileUploader = ({
+  isDialogOpen,
+  closeDialog,
+  userImage,
+  user,
+  getUser,
+}) => {
   const [updateImage] = useMutation(UPLOAD_IMAGE);
   const [image, setImage] = useState({ data: userImage });
   const fileRef = useRef(null);
-  const { getUser, user } = useAuth();
-
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
-
-  if (!user) {
-    return <div>Loading user data...</div>;
-  }
 
   const handleFileClick = () => {
     console.log(fileRef.current);

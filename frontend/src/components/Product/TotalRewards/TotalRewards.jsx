@@ -159,7 +159,7 @@ const TotalRewards = () => {
           <p className="text-3xl lg:text-4xl font-semibold">
             $
             {Object.values(employee.salary)
-              .splice(0, 5)
+              .filter((s) => typeof s === "number")
               .reduce((total, curr) => (total += curr), 0)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}

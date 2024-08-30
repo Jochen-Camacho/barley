@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 const PeopleData = ({ filterVars }) => {
   const navigate = useNavigate();
 
-  // console.log(filterVars);
+  console.log(filterVars);
   const result = useQuery(ALL_EMPLOYEES, {
     variables: { ...filterVars },
   });

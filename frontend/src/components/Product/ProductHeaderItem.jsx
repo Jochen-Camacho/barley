@@ -16,7 +16,6 @@ const ProductHeaderItem = ({
   defaultFilter,
 }) => {
   const [triggerName, setTriggerName] = useState(title);
-  console.log(typeof options[0] === "object");
 
   return (
     <DropdownMenu>
@@ -41,8 +40,11 @@ const ProductHeaderItem = ({
               <DropdownMenuItem
                 key={typeof o === "object" ? o.id : o}
                 onClick={() => {
-                  setFilterVars({ ...filterVars, [identifier]: o });
-                  setTriggerName(o);
+                  setFilterVars({
+                    ...filterVars,
+                    [identifier]: typeof o === "object" ? o.title : o,
+                  });
+                  setTriggerName(typeof o === "object" ? o.title : o);
                 }}
               >
                 {typeof o === "object" ? o.title : o}

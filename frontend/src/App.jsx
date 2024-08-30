@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import "./App.css";
 import EmployeeProfile from "./components/EmployeeProfile/EmployeeProfile";
 import PayBands from "./components/Product/PayBands/PayBands";
@@ -15,28 +14,13 @@ import User from "./components/Nav/User/User";
 import { useAuth } from "./hooks/useAuth";
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  useEffect(() => {
-    console.log("ProtectedRoute rendered", {
-      isAuthenticated,
-      isLoading,
-      pathname: location.pathname,
-    });
-  }, [isAuthenticated, isLoading, location]);
-
-  if (isLoading) {
-    console.log("Auth state is loading");
-    return <div>Loading...</div>; // Or a loading spinner/component
-  }
-
   if (!isAuthenticated) {
-    console.log("User is not authenticated, redirecting to login");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  console.log("User is authenticated, rendering children");
   return children;
 };
 
@@ -79,7 +63,8 @@ const App = () => {
               <div className="absolute w-[100vw] h-screen backdrop-blur-lg bg-black/80 -z-10">
                 <div
                   style={{
-                    backgroundImage: "url(/assets/background.jpg)",
+                    backgroundImage:
+                      "url(https://barleybucket.s3.us-east-2.amazonaws.com/0298a95c-2ee4-43cc-a068-250d9b64a529_photo.jpg)",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}

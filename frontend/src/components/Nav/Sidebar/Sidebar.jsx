@@ -3,6 +3,7 @@ import { sideBarLinks } from "/src/constants";
 import { HandCoins, Shovel, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const getIcon = (icon) => {
   if (icon === "Users") return <Users size={20} />;
@@ -18,7 +19,13 @@ const Sidebar = () => {
   }, [getUser]);
 
   if (!user) {
-    return <div>Loading user data...</div>;
+    return (
+      <Skeleton
+        className={
+          "fixed top-0 bg-gray-300 inset-y-0 left-0 lg:max-w-[250px] md:max-w-[200px] h-screen w-full animate-pulse rounded-none"
+        }
+      />
+    );
   }
 
   const filterSideBarLinks = sideBarLinks.filter((l) => {

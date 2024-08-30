@@ -35,8 +35,7 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem("barley-user");
       if (token) {
         try {
-          // Perform a request to validate the token
-          await refetchUserId(); // Ensure this does not fail silently
+          await refetchUserId();
           setIsAuthenticated(true);
         } catch (error) {
           console.error("Token validation failed:", error);
@@ -110,14 +109,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, [isAuthenticated, userIdData, refetchUser]);
-
-  useEffect(() => {
-    console.log("Auth state changed:", {
-      isAuthenticated,
-      isLoading,
-      user: user ? "User set" : "No user",
-    });
-  }, [isAuthenticated, isLoading, user]);
 
   const value = {
     isAuthenticated,

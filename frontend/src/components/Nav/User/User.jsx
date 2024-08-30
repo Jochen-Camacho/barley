@@ -9,6 +9,7 @@ import {
 import FileUploader from "./FileUploader";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const User = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -19,7 +20,7 @@ const User = () => {
   }, [getUser]);
 
   if (!user) {
-    return <div>Loading user data...</div>;
+    return <Skeleton className={"w-10 h-10 rounded-full bg-gray-300"} />;
   }
 
   return (
@@ -51,6 +52,8 @@ const User = () => {
         isDialogOpen={isDialogOpen}
         closeDialog={() => setIsDialogOpen(false)}
         userImage={user.image}
+        user={user}
+        getUser={getUser}
       />
     </div>
   );
