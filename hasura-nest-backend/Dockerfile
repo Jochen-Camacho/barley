@@ -1,13 +1,25 @@
 FROM node:20
 
-WORKDIR /usr/src/app 
+# Create app directory
+WORKDIR /usr/src/app
 
-COPY --chown=node:node . .
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
 
-RUN npm install -g @nestjs/cli
+# Install app dependencies
+RUN npm install
 
-RUN npm ci
+# Bundle app source
+COPY . .
 
-USER node
+# Copy the .env and .env.development files
+COPY .env  ./
 
-CMD ["npm", "start"]
+# Creates a "dist" folder with the production build
+RUN npm run build
+
+# Expose the port on which the app will run
+EXPOSE 3001
+
+# Start the server using the production build
+CMD ["npm", "run", "start:prod"]
