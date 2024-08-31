@@ -20,7 +20,7 @@ const PayBandsData = ({ filterVars }) => {
   const maxSalary = data.maxEmployeeBaseSalary.salary.max;
   const { payband } = data;
 
-  const range = (maxSalary + 30000) / 1000;
+  const range = maxSalary / 1000;
   let ranges = [];
 
   for (let i = 0; i < 4; i++) {

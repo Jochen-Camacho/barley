@@ -28,8 +28,14 @@ const authLink = setContext((_, { headers }) => {
 // const httpLink = createHttpLink({
 //   uri: "http://localhost:3000/graphql",
 // });
+// const httpLink = createHttpLink({
+//   uri: "http://localhost:8080/v1/graphql",
+//   headers: {
+//     "x-hasura-admin-secret": "myadminsecret",
+//   },
+// });
 const httpLink = createHttpLink({
-  uri: "http://localhost:8080/v1/graphql",
+  uri: "http://54.89.143.87:8080/v1/graphql",
   headers: {
     "x-hasura-admin-secret": "myadminsecret",
   },

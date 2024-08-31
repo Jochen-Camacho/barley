@@ -52,7 +52,7 @@ const Login = () => {
                 await login({
                   firstName: "John",
                   lastName: "Doe",
-                  email: "johndoe@gmail.com",
+                  email: "johndoe@examplecom",
                 });
                 navigate("/");
               }}
