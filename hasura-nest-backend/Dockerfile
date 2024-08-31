@@ -2,9 +2,9 @@ FROM node:20
 
 WORKDIR /usr/src/app 
 
-RUN npm install -g @nestjs/cli
-
 COPY --chown=node:node . .
+
+RUN npm install -g @nestjs/cli
 
 RUN npm ci
 
