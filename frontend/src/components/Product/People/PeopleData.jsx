@@ -21,7 +21,9 @@ const PeopleData = ({ filterVars }) => {
 
   if (result.loading) return;
 
-  // console.log(result);
+  const employees = [...result.data.employee].sort((a, b) =>
+    a.firstName.localeCompare(b.firstName)
+  );
 
   return (
     <ScrollArea className="border rounded-md overflow-auto">
@@ -51,7 +53,7 @@ const PeopleData = ({ filterVars }) => {
               <TableCell>Loading</TableCell>
             </TableRow>
           ) : (
-            result.data.employee.map((e) => (
+            employees.map((e) => (
               <TableRow
                 key={e.id}
                 onClick={() => navigate(`/people/${e.id}`)}

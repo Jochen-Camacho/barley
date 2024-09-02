@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { sideBarLinks } from "/src/constants";
 import { HandCoins, Shovel, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,10 +13,15 @@ const getIcon = (icon) => {
 
 const Sidebar = () => {
   const { getUser, user } = useAuth();
+  const location = useLocation();
 
   useEffect(() => {
     getUser();
   }, [getUser]);
+
+  useEffect(() => {
+    console.log(location.pathname);
+  }, [location.pathname]);
 
   if (!user) {
     return (
@@ -50,11 +55,13 @@ const Sidebar = () => {
           Barley
         </h1>
       </div>
-      <div className="mt-6  px-4">
+      <div className="mt-6 px-2">
         {filterSideBarLinks.map((link) => (
           <Link
             to={link.href}
-            className="py-2 cursor-pointer flex items-center gap-3"
+            className={`py-2 cursor-pointer flex items-center rounded-lg px-2 gap-3 ${
+              location.pathname === link.href && "bg-gray-100/10 "
+            }`}
             key={link.id}
           >
             {getIcon(link.icon)}
