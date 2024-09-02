@@ -40,6 +40,12 @@ const httpLink = createHttpLink({
     "x-hasura-admin-secret": "myadminsecret",
   },
 });
+// const httpLink = createHttpLink({
+//   uri: "http://54.89.143.87:8080/v1/graphql",
+//   headers: {
+//     "x-hasura-admin-secret": "myadminsecret",
+//   },
+// });
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),

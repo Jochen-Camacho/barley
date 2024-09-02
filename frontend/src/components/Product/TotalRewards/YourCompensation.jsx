@@ -17,7 +17,7 @@ const YourCompensation = ({ employee }) => {
           <ProductHeader header={"Your Compensation"} />
         </div>
         <div className="flex flex-wrap p-8 gap-6">
-          <div className="border p-3 flex gap-3 rounded-md min-w-[300px]">
+          <div className="border p-3 flex gap-3 rounded-md sm:min-w-[300px]">
             <div className="w-12 h-12 rounded-full overflow-hidden">
               <img
                 src={employee.image}
@@ -33,7 +33,7 @@ const YourCompensation = ({ employee }) => {
               <p className="text-gray-500">{employee.location.country}</p>
             </div>
           </div>
-          <div className="border p-3 flex-grow min-w-[300px] rounded-md">
+          <div className="border p-3 flex-grow sm:min-w-[300px] rounded-md">
             <h1 className="font-semibold text-md">Your Pay Band</h1>
             <div className="w-full pb-8 pt-7 px-8 bg-gray-100 rounded-md mt-2">
               <div className="bg-blue-500 w-full h-2 rounded-full relative">

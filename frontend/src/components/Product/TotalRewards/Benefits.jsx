@@ -9,7 +9,7 @@ const Benefits = ({ employee }) => {
           <ProductHeader header={"Benefits"} />
         </div>
         <div className="flex px-8 gap-6 flex-wrap md:py-0 py-4">
-          <div className="border p-3 rounded-md min-w-[300px]">
+          <div className="border p-3 rounded-md sm:min-w-[300px]">
             <h1 className="hidden md:flex font-bold text-lg">Your Benefits</h1>
             <div className="flex gap-4 md:mt-4">
               <div className="flex flex-col">
@@ -35,7 +35,7 @@ const Benefits = ({ employee }) => {
             </div> */}
             </div>
           </div>
-          <div className="flex items-center gap-4 flex-wrap min-w-[350px]">
+          <div className="flex items-center gap-4 flex-wrap sm:min-w-[350px]">
             <div className=" md:border md:p-3 rounded-md">
               <h1 className="text-nowrap text-lg font-bold pb-2">Work Perks</h1>
               <div className="flex gap-4">
@@ -77,12 +77,10 @@ const Benefits = ({ employee }) => {
                     <FilePen size={30} color="hsl(225, 91%, 62%)" />
                   </div>
                   <div className="flex flex-col py-2">
-                    <p className=" text-nowrap text-sm font-semibold">
+                    <p className=" text-sm font-semibold">
                       Tax-filing Services
                     </p>
-                    <p className="text-gray-500 text-nowrap text-sm">
-                      $200 / month
-                    </p>
+                    <p className="text-gray-500  text-sm">$200 / month</p>
                   </div>
                 </div>
                 <div className="flex flex-col p-2">
@@ -90,12 +88,8 @@ const Benefits = ({ employee }) => {
                     <CircleDollarSign size={30} color="hsl(225, 91%, 62%)" />
                   </div>
                   <div className="flex flex-col py-2">
-                    <p className=" text-nowrap text-sm font-semibold">
-                      RRSP Matching
-                    </p>
-                    <p className="text-gray-500 text-nowrap text-sm">
-                      5% of base salary
-                    </p>
+                    <p className=" text-sm font-semibold">RRSP Matching</p>
+                    <p className="text-gray-500  text-sm">5% of base salary</p>
                   </div>
                 </div>
               </div>

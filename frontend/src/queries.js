@@ -57,6 +57,7 @@ export const ALL_META = gql`
 export const ALL_PAY_BANDS = gql`
   query AllPayBands($job: String, $department: String, $level: [Int]) {
     payband(
+      order_by: { department: { title: asc }, job: { level: asc } }
       where: {
         _and: [
           { job: { title: { _regex: $job } } }

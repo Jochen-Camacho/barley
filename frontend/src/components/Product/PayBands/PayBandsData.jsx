@@ -44,7 +44,7 @@ const PayBandsData = ({ filterVars }) => {
             <TableHead className="flex justify-between items-center w-full  min-w-[300px] ">
               {ranges.map((r) => (
                 <div className="text-xs" key={r}>
-                  ${r}k
+                  ${r + 30}k
                 </div>
               ))}
             </TableHead>
@@ -64,10 +64,10 @@ const PayBandsData = ({ filterVars }) => {
               </TableCell>
               <TableCell className="z-0">
                 <PayBandVisualization
-                  min={0}
-                  max={
-                    Math.max(...pb.employees.map((e) => e.salary.base)) + 30000
-                  }
+                  min={30000}
+                  max={Math.max(
+                    ...pb.employees.map((e) => e.salary.base + 30000)
+                  )}
                   employees={pb.employees.map((e) => e)}
                 />
               </TableCell>
